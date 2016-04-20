@@ -22,7 +22,7 @@ function varargout = PR(varargin)
 
 % Edit the above text to modify the response to help PR
 
-% Last Modified by GUIDE v2.5 08-Apr-2016 18:18:42
+% Last Modified by GUIDE v2.5 15-Apr-2016 18:33:47
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,6 +54,9 @@ function PR_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for PR
 handles.output = hObject;
 handles.file_chosen = 0;
+handles.selected_indexes = [];
+handles.data = [];
+handles.selected_columns = [];
 
 % Update handles structure
 guidata(hObject, handles);
@@ -80,7 +83,27 @@ function start_button_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA) 
     if handles.file_chosen == 0
         errordlg('Please, choose a file first.', 'Error');
+    
+    else
+        [~, len] = size(handles.selected_indexes);
+        
+        if len > 0
+            aux = [];
+            selected = handles.selected_indexes;
+            for i=1:len
+                %disp(handles.data(:,selected(i)+1));
+                aux = [aux handles.data(:,selected(i)+1)];
+            end
+            
+            %disp(aux);            
+            %assignin('base', 'aux', aux);
+        end
+        
+        
+        guidata(hObject, handles);
     end
+    
+
 
 % --- Executes on button press in quit_button.
 function quit_button_Callback(hObject, eventdata, handles)
@@ -191,5 +214,53 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
     if ~isequal(filename, 0)       
         set(handles.file_chosen_field, 'String', filename);
         handles.file_chosen = 1;
+        
+        %Load File
+        %disp(filename);
+        [num,txt] = xlsread(filename);
+        disp('File loaded successfully!');
+        handles.data = num;
+        %size(txt)
+        
+        %Insert elements in the listbox
+        columns = txt(2,2:25);
+        set(handles.feature_selection_box, 'String', columns);
+        
+        disp(size(handles.data));
+        
         guidata(hObject, handles);
     end
+
+
+% --- Executes on selection change in feature_selection_box.
+function feature_selection_box_Callback(hObject, eventdata, handles)
+% hObject    handle to feature_selection_box (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+    %contents = cellstr(get(hObject,'String'));% returns feature_selection_box contents as cell array
+	%disp(contents);
+    %contents{get(hObject,'Value')} returns selected item from feature_selection_box
+    
+    if handles.file_chosen ~= 0
+        list = get(hObject, 'Value');
+        handles.selected_indexes = list;
+        %disp(list);
+        
+        
+        guidata(hObject, handles);
+    end
+    
+
+    
+% --- Executes during object creation, after setting all properties.
+function feature_selection_box_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to feature_selection_box (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
