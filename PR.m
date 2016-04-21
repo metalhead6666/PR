@@ -58,6 +58,9 @@ handles.selected_indexes = [];
 handles.data = [];
 handles.selected_columns = [];
 handles.target = [];
+handles.scaling_choice = 1;
+handles.class_choice = 1;
+handles.ft_red_choice = 1;
 
 % Update handles structure
 guidata(hObject, handles);
@@ -91,12 +94,13 @@ function start_button_Callback(hObject, eventdata, handles)
         if len > 0
             aux = [];
             selected = handles.selected_indexes;
+            
             for i=1:len
                 %disp(handles.data(:,selected(i)+1));
                 aux = [aux handles.data(:,selected(i)+1)];
             end
-            handles.selected_columns = aux;
             
+            handles.selected_columns = aux;            
             
             [~,len] = size(handles.data);
             
@@ -108,8 +112,6 @@ function start_button_Callback(hObject, eventdata, handles)
             %disp(aux);            
             %assignin('base', 'aux', aux);
         end
-        
-        
         
         guidata(hObject, handles);
     end
@@ -131,34 +133,14 @@ function class_listbox_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns class_listbox contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from class_listbox
-
+    if handles.file_chosen ~= 0
+        handles.class_choice = get(hObject, 'Value');
+        guidata(hObject, handles);
+    end
 
 % --- Executes during object creation, after setting all properties.
 function class_listbox_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to class_listbox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on selection change in ft_sel_listbox.
-function ft_sel_listbox_Callback(hObject, eventdata, handles)
-% hObject    handle to ft_sel_listbox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns ft_sel_listbox contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from ft_sel_listbox
-
-
-% --- Executes during object creation, after setting all properties.
-function ft_sel_listbox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to ft_sel_listbox (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -178,6 +160,10 @@ function ft_red_listbox_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns ft_red_listbox contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from ft_red_listbox
 
+    if handles.file_chosen ~= 0
+        handles.ft_red_choice = get(hObject, 'Value');
+        guidata(hObject, handles);
+    end
 
 % --- Executes during object creation, after setting all properties.
 function ft_red_listbox_CreateFcn(hObject, eventdata, handles)
@@ -200,11 +186,14 @@ function scaling_listbox_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns scaling_listbox contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from scaling_listbox
-    if handles.file_chosen ~= 0
-        
-    end
 
 % --- Executes during object creation, after setting all properties.
+
+    if handles.file_chosen ~= 0
+        handles.scaling_choice = get(hObject, 'Value');
+        guidata(hObject, handles);
+    end
+
 function scaling_listbox_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to scaling_listbox (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -262,11 +251,7 @@ function feature_selection_box_Callback(hObject, eventdata, handles)
     %contents{get(hObject,'Value')} returns selected item from feature_selection_box
     
     if handles.file_chosen ~= 0
-        list = get(hObject, 'Value');
-        handles.selected_indexes = list;
-        %disp(list);
-        
-        
+        handles.selected_indexes = get(hObject, 'Value');
         guidata(hObject, handles);
     end
     
