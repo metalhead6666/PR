@@ -22,7 +22,7 @@ function varargout = PR(varargin)
 
 % Edit the above text to modify the response to help PR
 
-% Last Modified by GUIDE v2.5 21-Apr-2016 01:25:33
+% Last Modified by GUIDE v2.5 21-Apr-2016 19:18:28
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -61,6 +61,7 @@ handles.target = [];
 handles.scaling_choice = 1;
 handles.class_choice = 1;
 handles.ft_red_choice = 1;
+handles.dimension_chosen = -1;
 
 % Update handles structure
 guidata(hObject, handles);
@@ -87,7 +88,8 @@ function start_button_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA) 
     if handles.file_chosen == 0
         errordlg('Please, choose a file first.', 'Error');
-    
+    elseif handles.dimension_chosen <= 0 || isnan(handles.dimension_chosen)
+        errordlg('Please, insert a valid dimension.', 'Error');
     else
         [~, len] = size(handles.selected_indexes);
         
@@ -104,9 +106,7 @@ function start_button_Callback(hObject, eventdata, handles)
             [~,len] = size(handles.data);
             
             handles.target = handles.data(:,len);
-            
-            target = [];
-            predicted = [];
+           
             [target, predicted] = main(handles);
             
             %size(target)
@@ -219,7 +219,7 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)   
     [filename, ~] = uigetfile('*.xlsx');
     
-    if ~isequal(filename, 0)       
+    if ~isequal(filename, 0)     
         set(handles.file_chosen_field, 'String', filename);
         handles.file_chosen = 1;
         
@@ -358,3 +358,29 @@ function feature_selection_box_KeyPressFcn(hObject, eventdata, handles)
 %	Character: character interpretation of the key(s) that was pressed
 %	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+function dimension_textbox_Callback(hObject, eventdata, handles)
+% hObject    handle to dimension_textbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of dimension_textbox as text
+%        str2double(get(hObject,'String')) returns contents of dimension_textbox as a double
+    if handles.file_chosen ~= 0
+        handles.dimension_chosen = str2double(get(hObject, 'String'));        
+        guidata(hObject, handles);
+    end
+    
+% --- Executes during object creation, after setting all properties.
+function dimension_textbox_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to dimension_textbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
