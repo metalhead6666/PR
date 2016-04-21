@@ -22,7 +22,7 @@ function varargout = PR(varargin)
 
 % Edit the above text to modify the response to help PR
 
-% Last Modified by GUIDE v2.5 15-Apr-2016 18:33:47
+% Last Modified by GUIDE v2.5 21-Apr-2016 01:25:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -57,6 +57,7 @@ handles.file_chosen = 0;
 handles.selected_indexes = [];
 handles.data = [];
 handles.selected_columns = [];
+handles.target = [];
 
 % Update handles structure
 guidata(hObject, handles);
@@ -94,10 +95,20 @@ function start_button_Callback(hObject, eventdata, handles)
                 %disp(handles.data(:,selected(i)+1));
                 aux = [aux handles.data(:,selected(i)+1)];
             end
+            handles.selected_columns = aux;
             
+            
+            [~,len] = size(handles.data);
+            
+            handles.target = handles.data(:,len);
+            
+            main(handles);
+            
+            %disp(handles.target(1:10));
             %disp(aux);            
             %assignin('base', 'aux', aux);
         end
+        
         
         
         guidata(hObject, handles);
@@ -218,15 +229,16 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         %Load File
         %disp(filename);
         [num,txt] = xlsread(filename);
-        disp('File loaded successfully!');
+        %disp('File loaded successfully!');
         handles.data = num;
         %size(txt)
         
         %Insert elements in the listbox
-        columns = txt(2,2:25);
+        columns = txt(2,2:24);
         set(handles.feature_selection_box, 'String', columns);
+        handles.selected_indexes = get(handles.feature_selection_box,'Value');
         
-        disp(size(handles.data));
+        %disp(size(handles.data));
         
         guidata(hObject, handles);
     end
@@ -264,3 +276,86 @@ function feature_selection_box_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on slider movement.
+function percentage_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to percentage_slider (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+    val = int32(get(hObject,'Value'));
+    set(handles.edit_train,'String',num2str(val));
+    set(handles.edit_test,'String',num2str(100-val));
+    
+
+
+% --- Executes during object creation, after setting all properties.
+function percentage_slider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to percentage_slider (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+
+function edit_train_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_train (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_train as text
+%        str2double(get(hObject,'String')) returns contents of edit_train as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_train_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_train (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white'); 
+end
+
+
+
+function edit_test_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_test (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_test as text
+%        str2double(get(hObject,'String')) returns contents of edit_test as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_test_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_test (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on key press with focus on feature_selection_box and none of its controls.
+function feature_selection_box_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to feature_selection_box (see GCBO)
+% eventdata  structure with the following fields (see MATLAB.UI.CONTROL.UICONTROL)
+%	Key: name of the key that was pressed, in lower case
+%	Character: character interpretation of the key(s) that was pressed
+%	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
+% handles    structure with handles and user data (see GUIDATA)
