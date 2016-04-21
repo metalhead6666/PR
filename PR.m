@@ -241,6 +241,10 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         set(handles.ft_red_listbox, 'String', string_list);
         set(handles.class_listbox, 'String', 'Minimum Distance Classifier');
         
+        set(handles.dimension_textbox, 'Style', 'edit');
+        handles.dimension_chosen = str2double(get(handles.dimension_textbox, 'String'));        
+
+        
         %disp(size(handles.data));
         
         guidata(hObject, handles);
@@ -384,3 +388,5 @@ function dimension_textbox_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+set(hObject,'String',num2str(1));
