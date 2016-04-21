@@ -15,11 +15,25 @@ test_data = handles.selected_columns(train_amount+1:len,:);
 train_target = handles.target(1:train_amount,:);
 test_target = handles.target(train_amount+1:len,:);
 
-%TODO: Check Scaling
+%Scaling before PCA/LDA
+
+if handles.scaling_choice == 1
+    train_data = normc(train_data);
+end
 
 %TODO: Check PCA/LDA
 
+if handles.ft_red_choice == 1
+    % pca shit
+elseif handles.ft_red_choice == 2
+    % lda shit
+end
 
+%Scaling after PCA/LDA
+
+if handles.scaling_choice == 2
+    train_data = normc(train_data);
+end
 
 %Calculate mean for each class
 train_data = train_data';
