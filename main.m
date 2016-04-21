@@ -24,13 +24,13 @@ function [target, predicted] = main(handles)
 
     %TODO: Check PCA/LDA
 
-    if handles.ft_red_choice == 1 && handles.dimension_chosen <= n_features
+    if handles.ft_red_choice == 1 && handles.dimension_chosen < n_features
         model = pca(all_data', handles.dimension_chosen);
         train_data = linproj(train_data', model);
         test_data = linproj(test_data', model);
         train_data = train_data';
         test_data = test_data';
-    elseif handles.ft_red_choice == 2 && handles.dimension_chosen <= n_features
+    elseif handles.ft_red_choice == 2 && handles.dimension_chosen < n_features
         % lda stuff
     end
 
