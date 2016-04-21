@@ -200,7 +200,9 @@ function scaling_listbox_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns scaling_listbox contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from scaling_listbox
-
+    if handles.file_chosen ~= 0
+        
+    end
 
 % --- Executes during object creation, after setting all properties.
 function scaling_listbox_CreateFcn(hObject, eventdata, handles)
@@ -236,6 +238,11 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         %Insert elements in the listbox
         columns = txt(2,2:24);
         set(handles.feature_selection_box, 'String', columns);
+        string_list = {'Before'; 'After'; 'None'};        
+        set(handles.scaling_listbox, 'String', string_list);
+        string_list = {'PCA'; 'LDA'};
+        set(handles.ft_red_listbox, 'String', string_list);
+        set(handles.class_listbox, 'String', 'Minimum Distance Classifier');
         handles.selected_indexes = get(handles.feature_selection_box,'Value');
         
         %disp(size(handles.data));
