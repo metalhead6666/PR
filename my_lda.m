@@ -1,4 +1,4 @@
-function model = lda(data,new_dim)
+function model = my_lda(data,new_dim)
 % LDA Linear Discriminant Analysis.
 % 
 % Synopsis:
@@ -52,7 +52,8 @@ function model = lda(data,new_dim)
 
 % process input arguments
 %----------------------------------------
-data=c2s(data);
+%data=c2s(data);
+data = struct('X', data{1}, 'y', data{2});
 [dim,num_data] = size(data.X);
 nclass = max( data.y );
 

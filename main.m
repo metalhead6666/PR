@@ -15,6 +15,7 @@ function [target, predicted] = main(handles)
     %Separates train and test values in target data
     train_target = handles.target(1:train_amount,:);
     test_target = handles.target(train_amount+1:len,:);
+    all_target = handles.target;
 
     %Scaling before PCA/LDA
 
@@ -24,14 +25,21 @@ function [target, predicted] = main(handles)
 
     %TODO: Check PCA/LDA
 
-    if handles.ft_red_choice == 1 && handles.dimension_chosen < n_features
+    if handles.ft_red_choice == 1 && handles.dimension_chosen < n_features        
         model = my_pca(all_data', handles.dimension_chosen);
         train_data = my_linproj(train_data', model);
         test_data = my_linproj(test_data', model);
         train_data = train_data';
         test_data = test_data';
     elseif handles.ft_red_choice == 2 && handles.dimension_chosen < n_features
-        % lda stuff
+        data_with_target = cell(1);
+        data_with_target{1} = all_data';
+        data_with_target{2} = all_target';
+        model = my_lda(data_with_target, handles.dimension_chosen);
+        train_data = my_linproj(train_data', model);
+        test_data = my_linproj(test_data', model);
+        train_data = train_data';
+        test_data = test_data';
     end
 
     %Scaling after PCA/LDA
