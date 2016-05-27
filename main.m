@@ -38,7 +38,9 @@ function [target, predicted] = main(handles)
         model = my_lda(data_with_target, handles.dimension_chosen);
         train_data = my_linproj(train_data', model);
         test_data = my_linproj(test_data', model);
+        train_data = real(train_data);
         train_data = train_data';
+        test_data = real(test_data);
         test_data = test_data';
     end
 
@@ -49,35 +51,46 @@ function [target, predicted] = main(handles)
     end
 
     %Calculate mean for each class
-    train_data = train_data';
+    
+    
+    if handles.class_choice == 1
+        train_data = train_data';
 
-    [n_dimensions, ~] = size(train_data);
+        [n_dimensions, ~] = size(train_data);
 
-    average = zeros(n_dimensions,2);
-    for i=1 : n_dimensions
-        average(i,1) = mean(train_data(i, train_target==0));
-        average(i,2) = mean(train_data(i, train_target==1));
+        average = zeros(n_dimensions,2);
+        for i=1 : n_dimensions
+            average(i,1) = mean(train_data(i, train_target==0));
+            average(i,2) = mean(train_data(i, train_target==1));
+        end
+        results = minimum_distance(test_data, average);
+        
+    elseif handles.class_choice == 2
+        %disp(size(train_data));
+        %disp(size(train_target));
+        %train_data = train_data';
+        svmStruct = fitcsvm(train_data, train_target);
+        results = predict(svmStruct, test_data);
+        results = results';
+    elseif handles.class_choice == 3
+        %disp(size(train_data));
+        %disp(size(train_target));
+        %train_data = train_data';
+        knnStruct = fitcknn(train_data, train_target);
+        results = predict(knnStruct, test_data);
+        results = results';
+        
     end
-
-
-    %TODO Euclidean Distance to Classify
-    [len,n_dimensions] = size(test_data);
-
-    results = zeros(1,len);
-    for i=1 : len
-        %disp(test_data(i,:));
-        %disp(average(:,1));
-        results(i) = euclidean(test_data(i,:),average);
-    end
-    %disp('Euclidean Done');
-    test_target = test_target';
+    
 
     %size(test_target)
     %size(results)
     %plotconfusion(test_target,results);
 
-    target = test_target;
+    target = test_target';
+    %disp(size(target));
     predicted = results;
+    %disp(size(predicted));
 
     %TODO Compare?
 end

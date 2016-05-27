@@ -106,7 +106,7 @@ function start_button_Callback(hObject, eventdata, handles)
             [~,len] = size(handles.data);
             
             handles.target = handles.data(:,len);
-           
+            
             [target, predicted] = main(handles);
             
             %size(target)
@@ -239,7 +239,8 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         set(handles.scaling_listbox, 'String', string_list);
         string_list = {'PCA'; 'LDA'};
         set(handles.ft_red_listbox, 'String', string_list);
-        set(handles.class_listbox, 'String', 'Minimum Distance Classifier');
+        string_list = {'Minimum Distance Classifier', 'Support Vector Machine', 'k-NN'};
+        set(handles.class_listbox, 'String', string_list);
         
         set(handles.dimension_textbox, 'Style', 'edit');
         handles.dimension_chosen = str2double(get(handles.dimension_textbox, 'String'));        
