@@ -231,7 +231,7 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         %size(txt)
         
         %Insert elements in the listbox
-        columns = txt(2,2:24);
+        columns = {'None', 'Kruskal-Wallis'};
         set(handles.feature_selection_box, 'String', columns);
         handles.selected_indexes = get(handles.feature_selection_box,'Value');
         
@@ -243,6 +243,7 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         set(handles.class_listbox, 'String', string_list);
         
         set(handles.dimension_textbox, 'Style', 'edit');
+        set(handles.knn_neigh, 'Style', 'edit');
         handles.dimension_chosen = str2double(get(handles.dimension_textbox, 'String'));        
 
         
