@@ -64,22 +64,44 @@ function [target, predicted] = main(handles)
             average(i,2) = mean(train_data(i, train_target==1));
         end
         results = minimum_distance(test_data, average);
-        
     elseif handles.class_choice == 2
+        train_data = train_data';
+        
+        [n_dimensions, ~] = size(train_data);
+
+        average = zeros(n_dimensions,2);
+        for i=1 : n_dimensions
+            average(i,1) = mean(train_data(i, train_target==0));
+            average(i,2) = mean(train_data(i, train_target==1));
+        end
+        
+        [~, columns] = size(average);
+        
+        [len, col] = size(test_data);
+        
+        if columns ~= col
+            average = average';
+        end
+        
+        results = zeros(1, len);               
+        
+        for i = 1 : len
+            results(i) = mahal(test_data, average);
+        end
+    elseif handles.class_choice == 3
         %disp(size(train_data));
         %disp(size(train_target));
         %train_data = train_data';
         svmStruct = fitcsvm(train_data, train_target);
         results = predict(svmStruct, test_data);
         results = results';
-    elseif handles.class_choice == 3
+    elseif handles.class_choice == 4
         %disp(size(train_data));
         %disp(size(train_target));
         %train_data = train_data';
         knnStruct = fitcknn(train_data, train_target);
         results = predict(knnStruct, test_data);
-        results = results';
-        
+        results = results';       
     end
     
 
