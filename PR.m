@@ -22,7 +22,7 @@ function varargout = PR(varargin)
 
 % Edit the above text to modify the response to help PR
 
-% Last Modified by GUIDE v2.5 21-Apr-2016 19:18:28
+% Last Modified by GUIDE v2.5 28-May-2016 23:00:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -239,7 +239,7 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         set(handles.scaling_listbox, 'String', string_list);
         string_list = {'PCA'; 'LDA'};
         set(handles.ft_red_listbox, 'String', string_list);
-        string_list = {'Minimum Distance Classifier', 'Support Vector Machine', 'k-NN'};
+        string_list = {'Minimum Distance Classifier', 'Mahalanobis Distance Classifier', 'Support Vector Machine', 'k-NN'};
         set(handles.class_listbox, 'String', string_list);
         
         set(handles.dimension_textbox, 'Style', 'edit');
@@ -391,3 +391,26 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 set(hObject,'String',num2str(1));
+
+
+
+function knn_neigh_Callback(hObject, eventdata, handles)
+% hObject    handle to knn_neigh (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of knn_neigh as text
+%        str2double(get(hObject,'String')) returns contents of knn_neigh as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function knn_neigh_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to knn_neigh (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
