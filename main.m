@@ -2,20 +2,41 @@ function [target, predicted] = main(handles)
     clc
 
     %Calculates amount of train and test data
-    [len,~] = size(handles.data);
-    train_amount = int32((str2num(get(handles.edit_train,'String'))/100)*len);
-    test_amount = len-train_amount;
-
-    %Separates train and test values in input data
-    train_data = handles.selected_columns(1:train_amount,:);
-    test_data = handles.selected_columns(train_amount+1:len,:);
-    all_data = handles.selected_columns;
-    [~, n_features] = size(all_data);
-
-    %Separates train and test values in target data
-    train_target = handles.target(1:train_amount,:);
-    test_target = handles.target(train_amount+1:len,:);
-    all_target = handles.target;
+    train_percentage = str2double(get(handles.edit_train,'String')) / 100;
+    
+    [len, ~] = size(handles.data);
+    handles.number_sel = int32(str2double(get(handles.number_sel, 'String')));
+    
+    if handles.selected_choice == 1
+        index_one = find(handles.data(:,end) == 1);
+        index_zero = find(handles.data(:,end) == 0);
+        [len_one, ~] = size(index_one);
+        [len_zero, ~] = size(index_zero);
+        len_one_1 = int32((1 - train_percentage) * len_one);
+        len_one = int32(train_percentage * len_one);
+        len_zero = int32(train_percentage * len_zero);
+        
+        train_data = zeros(len_one + len_zero, handles.number_sel);
+        test_data = zeros(len - (len_one + len_zero), handles.number_sel);
+        
+        train_data(1:len_one, :) = handles.data(index_one(1:len_one), 1:handles.number_sel);
+        train_data(len_one+1:end, :) = handles.data(index_zero(1:len_zero), 1:handles.number_sel);
+        
+        test_data(1:len_one_1, :) = handles.data(index_one(len_one+1:end), 1:handles.number_sel);
+        test_data(len_one_1+1:end, :) = handles.data(index_zero(len_zero+1:end), 1:handles.number_sel);
+        
+        all_data = [train_data(:,:); test_data(:,:)];
+        
+        train_target = zeros(len_one + len_zero, 1);
+        test_target = zeros(len - (len_one + len_zero), 1);
+        train_target(1:len_one, :) = handles.data(index_one(1:len_one), end);
+        train_target(len_one+1:end, :) = handles.data(index_zero(1:len_zero), end);
+        
+        test_target(1:len_one_1, :) = handles.data(index_one(len_one+1:end), end);
+        test_target(len_one_1+1:end, :) = handles.data(index_zero(len_zero+1:end), end);
+        
+        all_target = [train_target(:,:); test_target(:,:)];
+    end
 
     %Scaling before PCA/LDA
 
@@ -25,13 +46,13 @@ function [target, predicted] = main(handles)
 
     %TODO: Check PCA/LDA
 
-    if handles.ft_red_choice == 1 && handles.dimension_chosen < n_features        
+    if handles.ft_red_choice == 1        
         model = my_pca(all_data', handles.dimension_chosen);
         train_data = my_linproj(train_data', model);
         test_data = my_linproj(test_data', model);
         train_data = train_data';
         test_data = test_data';
-    elseif handles.ft_red_choice == 2 && handles.dimension_chosen < n_features
+    elseif handles.ft_red_choice == 2
         data_with_target = cell(1);
         data_with_target{1} = all_data';
         data_with_target{2} = all_target';
