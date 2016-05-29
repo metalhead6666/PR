@@ -38,9 +38,8 @@ function [target, predicted] = main(handles)
         all_target = [train_target(:,:); test_target(:,:)];
     
     elseif handles.selected_choice == 2
-        data = fsKruskalWallis(handles.data(:,1:end-1), handles.data(:, end));
-        data = data.fList;
-        data = data(1:handles.number_sel);
+        data = fsKruskalWallis(handles.data(:, 1:end-1), handles.data(:, end));
+        data = data.fList(1:handles.number_sel);
         
         [length, ~] = size(data);
         
@@ -52,22 +51,21 @@ function [target, predicted] = main(handles)
         train_target = zeros(train_amount, 1);
         test_target = zeros(test_amount, 1);
         
-        train_data(1:train_amount, data) = handles.data(1:train_amount, data);
-        train_data(train_amount+1, data) = handles.data(train_amount+1, data);
-        test_data(1:test_amount, data) = handles.data(1:test_amount, data);
-        test_data(test_amount+1, data) = handles.data(test_amount+1, data);
+        train_data(1:train_amount, :) = handles.data(1:train_amount, data);
+        train_data(train_amount+1, :) = handles.data(train_amount+1, data);
+        test_data(1:test_amount, :) = handles.data(1:test_amount, data);
+        test_data(test_amount+1, :) = handles.data(test_amount+1, data);
         
-        train_target(1:train_amount, 1) = handles.data(1:train_amount, end);
-        train_target(train_amount+1, 1) = handles.data(train_amount+1, end);
-        test_target(1:test_amount, 1) = handles.data(1:test_amount, end);
-        test_target(test_amount+1, 1) = handles.data(test_amount+1, end);
+        train_target(1:train_amount) = handles.data(1:train_amount, end);
+        train_target(train_amount+1) = handles.data(train_amount+1, end);
+        test_target(1:test_amount) = handles.data(1:test_amount, end);
+        test_target(test_amount+1) = handles.data(test_amount+1, end);
         
         all_data = [train_data(:,:); test_data(:,:)];
         all_target = [train_target(:,:); test_target(:,:)];
     elseif handles.selected_choice == 3
         data = fsFisher(handles.data(:, 1:end-1), handles.data(:, end));
-        data = data.fList;
-        data = data(1:handles.number_sel);
+        data = data.fList(1:handles.number_sel)';
         
         [length, ~] = size(data);
         
@@ -79,22 +77,22 @@ function [target, predicted] = main(handles)
         train_target = zeros(train_amount, 1);
         test_target = zeros(test_amount, 1);
         
-        train_data(1:train_amount, data) = handles.data(1:train_amount, data);
-        train_data(train_amount+1, data) = handles.data(train_amount+1, data);
-        test_data(1:test_amount, data) = handles.data(1:test_amount, data);
-        test_data(test_amount+1, data) = handles.data(test_amount+1, data);
+        train_data(1:train_amount, :) = handles.data(1:train_amount, data);
+        train_data(train_amount+1, :) = handles.data(train_amount+1, data);
+        test_data(1:test_amount, :) = handles.data(1:test_amount, data);
+        test_data(test_amount+1, :) = handles.data(test_amount+1, data);
         
-        train_target(1:train_amount, 1) = handles.data(1:train_amount, end);
-        train_target(train_amount+1, 1) = handles.data(train_amount+1, end);
-        test_target(1:test_amount, 1) = handles.data(1:test_amount, end);
-        test_target(test_amount+1, 1) = handles.data(test_amount+1, end);
+        train_target(1:train_amount) = handles.data(1:train_amount, end);
+        train_target(train_amount+1) = handles.data(train_amount+1, end);
+        test_target(1:test_amount) = handles.data(1:test_amount, end);
+        test_target(test_amount+1) = handles.data(test_amount+1, end);
         
         all_data = [train_data(:,:); test_data(:,:)];
         all_target = [train_target(:,:); test_target(:,:)];
     elseif handles.selected_choice == 4
         data = fsTtest(handles.data(:, 1:end-1), handles.data(:, end));
-        data = data.fList;
-        data = data(1:handles.number_sel);
+        data = data.fList(1:handles.number_sel);
+        disp(size(data));
         
         [length, ~] = size(data);
         
@@ -106,15 +104,15 @@ function [target, predicted] = main(handles)
         train_target = zeros(train_amount, 1);
         test_target = zeros(test_amount, 1);
         
-        train_data(1:train_amount, data) = handles.data(1:train_amount, data);
-        train_data(train_amount+1, data) = handles.data(train_amount+1, data);
-        test_data(1:test_amount, data) = handles.data(1:test_amount, data);
-        test_data(test_amount+1, data) = handles.data(test_amount+1, data);
+        train_data(1:train_amount, :) = handles.data(1:train_amount, data);
+        train_data(train_amount+1, :) = handles.data(train_amount+1, data);
+        test_data(1:test_amount, :) = handles.data(1:test_amount, data);
+        test_data(test_amount+1, :) = handles.data(test_amount+1, data);
         
-        train_target(1:train_amount, 1) = handles.data(1:train_amount, end);
-        train_target(train_amount+1, 1) = handles.data(train_amount+1, end);
-        test_target(1:test_amount, 1) = handles.data(1:test_amount, end);
-        test_target(test_amount+1, 1) = handles.data(test_amount+1, end);
+        train_target(1:train_amount) = handles.data(1:train_amount, end);
+        train_target(train_amount+1) = handles.data(train_amount+1, end);
+        test_target(1:test_amount) = handles.data(1:test_amount, end);
+        test_target(test_amount+1) = handles.data(test_amount+1, end);
         
         all_data = [train_data(:,:); test_data(:,:)];
         all_target = [train_target(:,:); test_target(:,:)];
