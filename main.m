@@ -38,8 +38,9 @@ function [target, predicted] = main(handles)
         all_target = [train_target(:,:); test_target(:,:)];
     
     elseif handles.selected_choice == 2
-        data = fsKruskalWallis(handles.data(:, 1:handles.number_sel), handles.data(:, end));
+        data = fsKruskalWallis(handles.data(:,1:end-1), handles.data(:, end));
         data = data.fList;
+        data = data(1:handles.number_sel);
         
         [length, ~] = size(data);
         
@@ -64,8 +65,9 @@ function [target, predicted] = main(handles)
         all_data = [train_data(:,:); test_data(:,:)];
         all_target = [train_target(:,:); test_target(:,:)];
     elseif handles.selected_choice == 3
-        data = fsFisher(handles.data(:, 1:handles.number_sel), handles.data(:, end));
+        data = fsFisher(handles.data(:, 1:end-1), handles.data(:, end));
         data = data.fList;
+        data = data(1:handles.number_sel);
         
         [length, ~] = size(data);
         
@@ -90,8 +92,9 @@ function [target, predicted] = main(handles)
         all_data = [train_data(:,:); test_data(:,:)];
         all_target = [train_target(:,:); test_target(:,:)];
     elseif handles.selected_choice == 4
-        data = fsTtest(handles.data(:, 1:handles.number_sel), handles.data(:, end));
+        data = fsTtest(handles.data(:, 1:end-1), handles.data(:, end));
         data = data.fList;
+        data = data(1:handles.number_sel);
         
         [length, ~] = size(data);
         
