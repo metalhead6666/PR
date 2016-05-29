@@ -90,18 +90,47 @@ function start_button_Callback(hObject, eventdata, handles)
         errordlg('Please, insert a valid dimension.', 'Error');
     else            
         [target, predicted] = main(handles);
+        
+        %str = sprintf('');
+        
+        if handles.class_choice == 4
+            str = sprintf('Sc:%d_Fr:%d_NDim:%d_Fs:%d_NF:%d,Class:4_NN:%d_Tr:%s%%_Ts:%s%%.jpg', ...
+                          handles.scaling_choice, ...
+                          handles.ft_red_choice, ...
+                          handles.dimension_chosen, ...
+                          handles.selected_choice, ...
+                          int32(str2double(get(handles.number_sel, 'String'))), ...
+                          handles.knn_neigh, ...
+                          get(handles.edit_train, 'String'), ...
+                          get(handles.edit_test, 'String'));
+        else
+            str = sprintf('Sc:%d_Fr:%d_NDim:%d_Fs:%d_NF:%d,Class:%d_Tr:%s%%_Ts:%s%%.jpg', ...
+                          handles.scaling_choice, ...
+                          handles.ft_red_choice, ...
+                          handles.dimension_chosen, ...
+                          handles.selected_choice, ...
+                          int32(str2double(get(handles.number_sel, 'String'))), ...
+                          handles.class_choice, ...
+                          get(handles.edit_train, 'String'), ...
+                          get(handles.edit_test, 'String'));
+        end
        
         g = figure;
-        [X, Y] = perfcurve(target, predicted, 1);
+        [X, Y] = perfcurve(target, predicted, 0);
         plot(Y, X);
-        xlabel('False Positive Rate (Sensitivity)');
-        ylabel('True Positive Rate (1 - Specificity)');
+        xlabel('False Positive Rate (1 - Specificity)');
+        ylabel('True Positive Rate (Sensitivity)');
         title('ROC Curve');
+        str2 = strcat('Tests/ROC_', str);        
         pause;
+        saveas(gcf, str2);
         close(g);
+        
         h = figure;
         plotconfusion(target, predicted);
+        str2 = strcat('Tests/Confusion_', str);        
         pause;
+        saveas(gcf, str2);
         close(h);
 
         guidata(hObject, handles);
@@ -222,7 +251,7 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         set(handles.scaling_listbox, 'String', string_list);
         string_list = {'None', 'PCA', 'LDA'};
         set(handles.ft_red_listbox, 'String', string_list);
-        string_list = {'Minimum Distance Classifier', 'Mahalanobis Distance Classifier', 'Support Vector Machine', 'k-NN'};
+        string_list = {'Euclidean Distance Classifier', 'Mahalanobis Distance Classifier', 'Support Vector Machine', 'k-NN'};
         set(handles.class_listbox, 'String', string_list);
         
         set(handles.dimension_textbox, 'Style', 'edit');
