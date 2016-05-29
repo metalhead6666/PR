@@ -208,9 +208,9 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         set(handles.feature_selection_box, 'String', columns);
         handles.selected_indexes = get(handles.feature_selection_box,'Value');
         
-        string_list = {'Before'; 'After'; 'None'};        
+        string_list = {'None', 'Before', 'After'};        
         set(handles.scaling_listbox, 'String', string_list);
-        string_list = {'PCA'; 'LDA'};
+        string_list = {'None, ''PCA', 'LDA'};
         set(handles.ft_red_listbox, 'String', string_list);
         string_list = {'Minimum Distance Classifier', 'Mahalanobis Distance Classifier', 'Support Vector Machine', 'k-NN'};
         set(handles.class_listbox, 'String', string_list);
