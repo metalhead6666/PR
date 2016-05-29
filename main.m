@@ -63,23 +63,75 @@ function [target, predicted] = main(handles)
         
         all_data = [train_data(:,:); test_data(:,:)];
         all_target = [train_target(:,:); test_target(:,:)];
+    elseif handles.selected_choice == 3
+        data = fsFisher(handles.data(:, 1:handles.number_sel), handles.data(:, end));
+        data = data.fList;
+        
+        [length, ~] = size(data);
+        
+        train_amount = int32(len * train_percentage);
+        test_amount = int32(len * (1-train_percentage));
+        
+        train_data = zeros(train_amount, length);
+        test_data = zeros(test_amount, length);
+        train_target = zeros(train_amount, 1);
+        test_target = zeros(test_amount, 1);
+        
+        train_data(1:train_amount, data) = handles.data(1:train_amount, data);
+        train_data(train_amount+1, data) = handles.data(train_amount+1, data);
+        test_data(1:test_amount, data) = handles.data(1:test_amount, data);
+        test_data(test_amount+1, data) = handles.data(test_amount+1, data);
+        
+        train_target(1:train_amount, 1) = handles.data(1:train_amount, end);
+        train_target(train_amount+1, 1) = handles.data(train_amount+1, end);
+        test_target(1:test_amount, 1) = handles.data(1:test_amount, end);
+        test_target(test_amount+1, 1) = handles.data(test_amount+1, end);
+        
+        all_data = [train_data(:,:); test_data(:,:)];
+        all_target = [train_target(:,:); test_target(:,:)];
+    elseif handles.selected_choice == 4
+        data = fsTtest(handles.data(:, 1:handles.number_sel), handles.data(:, end));
+        data = data.fList;
+        
+        [length, ~] = size(data);
+        
+        train_amount = int32(len * train_percentage);
+        test_amount = int32(len * (1-train_percentage));
+        
+        train_data = zeros(train_amount, length);
+        test_data = zeros(test_amount, length);
+        train_target = zeros(train_amount, 1);
+        test_target = zeros(test_amount, 1);
+        
+        train_data(1:train_amount, data) = handles.data(1:train_amount, data);
+        train_data(train_amount+1, data) = handles.data(train_amount+1, data);
+        test_data(1:test_amount, data) = handles.data(1:test_amount, data);
+        test_data(test_amount+1, data) = handles.data(test_amount+1, data);
+        
+        train_target(1:train_amount, 1) = handles.data(1:train_amount, end);
+        train_target(train_amount+1, 1) = handles.data(train_amount+1, end);
+        test_target(1:test_amount, 1) = handles.data(1:test_amount, end);
+        test_target(test_amount+1, 1) = handles.data(test_amount+1, end);
+        
+        all_data = [train_data(:,:); test_data(:,:)];
+        all_target = [train_target(:,:); test_target(:,:)];
     end
 
     %Scaling before PCA/LDA
 
-    if handles.scaling_choice == 1
+    if handles.scaling_choice == 2
         train_data = normc(train_data);
     end
 
     %TODO: Check PCA/LDA
 
-    if handles.ft_red_choice == 1        
+    if handles.ft_red_choice == 2        
         model = my_pca(all_data', handles.dimension_chosen);
         train_data = my_linproj(train_data', model);
         test_data = my_linproj(test_data', model);
         train_data = train_data';
         test_data = test_data';
-    elseif handles.ft_red_choice == 2
+    elseif handles.ft_red_choice == 3
         data_with_target = cell(1);
         data_with_target{1} = all_data';
         data_with_target{2} = all_target';
@@ -94,7 +146,7 @@ function [target, predicted] = main(handles)
 
     %Scaling after PCA/LDA
 
-    if handles.scaling_choice == 2
+    if handles.scaling_choice == 3
         train_data = normc(train_data);
     end
 
