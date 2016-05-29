@@ -38,7 +38,31 @@ function [target, predicted] = main(handles)
         all_target = [train_target(:,:); test_target(:,:)];
     
     elseif handles.selected_choice == 2
-        %implement kruskal    
+        data = fsKruskalWallis(handles.data(:, 1:handles.number_sel), handles.data(:, end));
+        data = data.fList;
+        
+        [length, ~] = size(data);
+        
+        train_amount = int32(len * train_percentage);
+        test_amount = int32(len * (1-train_percentage));
+        
+        train_data = zeros(train_amount, length);
+        test_data = zeros(test_amount, length);
+        train_target = zeros(train_amount, 1);
+        test_target = zeros(test_amount, 1);
+        
+        train_data(1:train_amount, data) = handles.data(1:train_amount, data);
+        train_data(train_amount+1, data) = handles.data(train_amount+1, data);
+        test_data(1:test_amount, data) = handles.data(1:test_amount, data);
+        test_data(test_amount+1, data) = handles.data(test_amount+1, data);
+        
+        train_target(1:train_amount, 1) = handles.data(1:train_amount, end);
+        train_target(train_amount+1, 1) = handles.data(train_amount+1, end);
+        test_target(1:test_amount, 1) = handles.data(1:test_amount, end);
+        test_target(test_amount+1, 1) = handles.data(test_amount+1, end);
+        
+        all_data = [train_data(:,:); test_data(:,:)];
+        all_target = [train_target(:,:); test_target(:,:)];
     end
 
     %Scaling before PCA/LDA
