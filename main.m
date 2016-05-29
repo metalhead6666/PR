@@ -36,6 +36,9 @@ function [target, predicted] = main(handles)
         test_target(len_one_1+1:end, :) = handles.data(index_zero(len_zero+1:end), end);
         
         all_target = [train_target(:,:); test_target(:,:)];
+    
+    elseif handles.selected_choice == 2
+        %implement kruskal    
     end
 
     %Scaling before PCA/LDA
