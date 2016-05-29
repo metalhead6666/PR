@@ -90,9 +90,19 @@ function start_button_Callback(hObject, eventdata, handles)
         errordlg('Please, insert a valid dimension.', 'Error');
     else            
         [target, predicted] = main(handles);
-
-        figure
+       
+        g = figure;
+        [X, Y] = perfcurve(target, predicted, 1);
+        plot(Y, X);
+        xlabel('False Positive Rate (Sensitivity)');
+        ylabel('True Positive Rate (1 - Specificity)');
+        title('ROC Curve');
+        pause;
+        close(g);
+        h = figure;
         plotconfusion(target, predicted);
+        pause;
+        close(h);
 
         guidata(hObject, handles);
     end
