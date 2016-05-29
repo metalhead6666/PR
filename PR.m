@@ -210,7 +210,7 @@ function file_chosen_button_Callback(hObject, eventdata, handles)
         
         string_list = {'None', 'Before', 'After'};        
         set(handles.scaling_listbox, 'String', string_list);
-        string_list = {'None, ''PCA', 'LDA'};
+        string_list = {'None', 'PCA', 'LDA'};
         set(handles.ft_red_listbox, 'String', string_list);
         string_list = {'Minimum Distance Classifier', 'Mahalanobis Distance Classifier', 'Support Vector Machine', 'k-NN'};
         set(handles.class_listbox, 'String', string_list);
